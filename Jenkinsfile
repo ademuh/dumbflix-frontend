@@ -15,7 +15,7 @@ pipeline{
                     cd ${dir}
                     git config --global user.email muhamaddestar5@gmail.com
                     git config --global user.name ademuh
-                    git pull origin main
+                    git pull origin master
                     exit
                     EOF"""
                     }
