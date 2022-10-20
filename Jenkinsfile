@@ -1,6 +1,6 @@
 def credential = 'ade-test'
 def server = 'ads@103.176.79.216'
-def dir ='/home/ads/dumbways-frontend'
+def dir ='/home/ads/dumbflix-frontend'
 
 pipeline{
     agent any
