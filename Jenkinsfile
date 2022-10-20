@@ -23,7 +23,7 @@ pipeline{
             }
         stage('Pull test - development'){
             when{
-                branch "dev"
+                branch "development"
                 }
             steps{
                 sshagent([credential]){
