@@ -13,6 +13,8 @@ pipeline {
 				sshagent([cred]){
 				sh """ssh -o StrictHostKeyChecking=no ${server} << EOF
 				cd ${directory}
+				docker stop app-fe
+				docker container rm app-fe
 				git pull ${remote} ${branch}
 				exit
 				EOF"""
@@ -36,7 +38,6 @@ pipeline {
 			steps{
 				sshagent([cred]){
 				sh """ssh -o StrictHostKeyChecking=no ${server} << EOF
-				docker stop app-fe
 				docker run -d -p 3000:3000 --name="app-fe" --tty dumbflix-fe
 				exit
 				EOF"""
