@@ -1,0 +1,29 @@
+def cred = "appserver"
+def server = "ads@103.189.234.70"
+def dir = "~/dumbflix-frontend"
+
+pipeline {
+	agent any
+	stages {
+		stage ('git pull'){
+			steps{ sshagent ([cred]){
+				ssh """ssh -o StrictHostKeyChecking=no ${server} << EOF
+				cd ${dir}
+				git pull origin master
+				exit
+				EOF"""
+				}
+			}
+		}
+
+		stage ('docker build'){
+                        steps{ sshagent ([cred]){
+                                ssh """ssh -o StrictHostKeyChecking=no ${server} << EOF
+                                cd ${dir}
+                                docker build -t dumbflix-fe .
+                                exit
+                                EOF"""
+                                }
+                        }
+                }
+}
