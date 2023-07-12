@@ -18,5 +18,28 @@ pipeline{
 				}
 			}
 		}
+
+                stage('docker build'){
+                     steps{
+                        sshagent([cred]){
+                                sh """ssh -o StrictHostKeyChecking=no ${server} << EOF
+                                cd ${directory}
+				docker build dumbflix-fe .
+                                exit
+                                EOF"""
+                                }
+                        }
+                }
+
+                stage('docker run'){
+                     steps{
+                        sshagent([cred]){
+                                sh """ssh -o StrictHostKeyChecking=no ${server} << EOF
+				docker run -d -p 3001:3000 dumbflix-fe
+                                exit
+                                EOF"""
+                                }
+                        }
+                }
 	}
 }
