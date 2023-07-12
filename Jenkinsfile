@@ -8,12 +8,14 @@ pipeline{
 	agent any
 	stages{
 		stage('repo pull'){
+		     steps{
 			sshagent([cred]){
 				ssh """ssh -o StrictHostKeyChecking=no ${server} << EOF
 				cd ${directory}
 				git pull ${remote} ${branch}
 				exit
 				EOF"""
+				}
 			}
 		}
 	}
