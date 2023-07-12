@@ -1,49 +1,20 @@
 def branch = "master"
 def remote = "origin"
 def directory = "~/dumbflix-frontend"
-def server = "ads@103.13.206.100"
-def cred = "appserver"
+def server = "ads@103.187.146.33"
+def cred = "dumbflix"
 
-pipeline {
+pipeline{
 	agent any
-
-	stages {
-		stage('Repository Pull'){
-			steps{
-				sshagent([cred]){
-				sh """ssh -o StrictHostKeyChecking=no ${server} << EOF
+	stages{
+		stage('repo pull'){
+			sshagent([cred]){
+				ssh """ssh -o StrictHostKeyChecking=no ${server} << EOF
 				cd ${directory}
-				docker stop app-fe
-				docker container rm app-fe
 				git pull ${remote} ${branch}
 				exit
 				EOF"""
-				}
-
-			}
-
-		}
-		stage('Build Image'){
-			steps{
-				sshagent([cred]){
-				sh """ssh -o StrictHostKeyChecking=no ${server} << EOF
-				cd ${directory}
-				docker build -t dumbflix-fe .
-				exit
-				EOF"""
-				}
 			}
 		}
-		stage('Run Image'){
-			steps{
-				sshagent([cred]){
-				sh """ssh -o StrictHostKeyChecking=no ${server} << EOF
-				docker run -d -p 3000:3000 --name="app-fe" --tty dumbflix-fe
-				exit
-				EOF"""
-				}
-			}
-		}
-
 	}
 }
