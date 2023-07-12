@@ -35,7 +35,7 @@ pipeline{
                      steps{
                         sshagent([cred]){
                                 sh """ssh -o StrictHostKeyChecking=no ${server} << EOF
-				docker run -d -p 3001:3000 dumbflix-fe
+				docker run -d -p 3001:3000 --tty --name frontend dumbflix-fe
                                 exit
                                 EOF"""
                                 }
