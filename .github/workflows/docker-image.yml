@@ -5,17 +5,24 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+  
+env:
+  DOCKER_IMAGE_NAME: dumbflix-test
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
+    
     - name: Build the Docker image
-      run: |
-       docker build --file Dockerfile --tag aimingds/my-image-name .
-       docker login -u aimingds -p kepoahkamu
-       docker push aimingds/my-image-name
+      run: docker build -t ${secrets.REGISTRY_URL}}${DOCKER_IMAGE_NAME}:latest .
+
+    - name: Login to Registry
+      run: echo "${{ secrets.REGISTRY_PASS }}" | docker login -u "${{ secrets.REGISTRY_USER }}" --password-stdin "${{ secrets.REGISTRY_URL }}"
+
+    - name: Push to Registry
+      run: docker push ${secrets.REGISTRY_URL}/${DOCKER_IMAGE_NAME}:latest
+
+    - name: Redeploy
+      run: curl -fku "${{ secrets.RANCHER_TOKEN }}" -X POST -H 'Accept: application/json' -H 'Content-Type: application/json' "${{ secrets.RANCHER_URL }}"
