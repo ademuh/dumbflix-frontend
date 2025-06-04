@@ -1,8 +1,8 @@
 def branch = "master"
 def remote = "origin"
-def directory = "~/dumbflix-frontend"
-def server = "ads@103.187.146.33"
-def cred = "dumbflix"
+def directory = "~/jenkins/dumbflix-frontend"
+def server = "mentor@103.150.197.209"
+def cred = "mentorssh"
 
 pipeline{
 	agent any
